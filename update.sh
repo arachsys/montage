@@ -19,6 +19,7 @@ if [ ! -d /mnt/home ]; then
   mount -t ext4 -o discard,noatime,ro /dev/mmcblk0p3 /mnt/home
 fi
 
+cp /mnt/loop/fix-* /usr/bin/
 umount -l /mnt/loop
 getty -l sh -n 115200 tty0
 

@@ -1,0 +1,32 @@
+#!/bin/sh -e
+
+VERSION=$(head -n 1 /mnt/root/etc/ngs-release)
+if [ "$VERSION" != "3.50.0" ]; then
+  echo "This script only supports Montage firmware version 3.50.0."
+  echo "Warning: the binary file format changes between releases so byte"
+  echo "offsets will need to be verified and updated for new versions."
+  exit 1
+fi >&2
+
+cd /mnt/root/usr/share/yamaha/contents
+echo "Fixing part names in preset performances"
+trap '[ $? -eq 0 ] || echo "Failed to update part names"' EXIT
+
+for FILE in performance/3F0*.pfm performance/3F1[0-E]*.pfm; do
+  echo "Fixing $FILE"
+  dd bs=1 count=20 if=$FILE skip=4 of=$FILE seek=745 conv=notrunc 2>/dev/null
+  for OFFSET in 1511 2277 3043 3809 4575 5341 6107 6873 7639 8405 9171 \
+      9937 10703 11469 12235; do
+    if dd if=$FILE bs=1 skip=$OFFSET count=20 | fgrep -q \
+         -e "BASS                " -e "BRASS               " \
+         -e "CHROMATIC PERC      " -e "DRUM/PERC           " \
+         -e "ETHNIC              " -e "GUITAR              " \
+         -e "KEYBOARD            " -e "MUSICAL FX          " \
+         -e "ORGAN               " -e "PAD/CHOIR           " \
+         -e "PIANO               " -e "SOUND FX            " \
+         -e "STRINGS             " -e "SYN COMP            " \
+         -e "SYN LEAD            " -e "WOODWIND            "; then
+      dd bs=1 count=20 if=$FILE skip=4 of=$FILE seek=$OFFSET conv=notrunc
+    fi 2>/dev/null
+  done
+done

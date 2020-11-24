@@ -33,6 +33,36 @@ The FAT32 boot filesystem is left unmounted as damaging this will brick the
 instrument in a way that will require JTAG and cannot be fixed with the
 standard update process.
 
+
+fix-presets
+-----------
+
+Yamaha gives the first part of Montage preset performances the same name as
+the whole performance, but subsequent parts use their instrument category in
+upper-case as name. It is cleaner and more useful to rename these after the
+performance too. No information is lost as each part already includes a
+separate instrument category field.
+
+fix-presets fixes all the active part names in presets to match the name of
+the performance. This also corrects a handful of presets which were renamed
+or corrected before release, but whose part names weren't updated in line.
+
+This script takes around four minutes to update all the presets, reporting
+its progress as it runs. /mnt/root must be mounted read-write beforehand,
+then mounted read-only again afterwards to cleanly sync the filesystem:
+
+  mount -o remount,rw /mnt/root
+  fix-presets
+  mount -o remount,ro /mnt/root
+
+It will refuse to run unless the firmware version is exactly 3.50.0. The
+binary file format changes between releases so byte offsets will need to be
+verified and updated for future versions.
+
+
+Disclaimer
+----------
+
 Remember that if your synthesiser bursts into flames and kills your family
 pet as a result of experiments or modifications gone wrong, you are unlikely
 to elicit much sympathy from Yamaha. I make no warranty and disclaim all
