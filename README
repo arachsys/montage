@@ -1,0 +1,42 @@
+Obtaining a shell on Yamaha Montage
+===================================
+
+Yamaha Montage firmware updates consist of an ext2 filesystem image which is
+loopback-mounted from a file 8N70OS_.PGM on an attached USB drive when the
+machine powers up with the Utility and Cursor Up buttons held.
+
+The initramfs /init script detects the magic button combination, mounts the
+USB drive and filesystem image, then runs update.sh from within that image.
+(The name 'update.sh' is misleading: it is actually exec()ed rather than run
+with a shell, so needs execute permissions and #! magic.)
+
+Real firmware updates overwrite the partitions on /dev/mmcblk0 with new
+images, but the included update.sh script instead uses this mechanism to
+non-destructively launch a shell on the Montage.
+
+A Makefile is provided to build update.sh into a suitable ext2 filesystem.
+This requires mke2fs and debugfs from e2fsprogs, but does not need root
+privileges or a Linux host as the filesystem image is not mounted.
+
+Run 'make' to build 8N70OS_.PGM, which should be copied to the root of a
+FAT32-formatted USB drive. Connect this to the Montage, hold Utility and
+Cursor Up, then turn on the instrument. A prompt will appear on the
+touchscreen and you can plug in a USB keyboard to interact with it.
+
+Before launching the shell, the instrument's main / and /home filesystems
+are mounted read-only on /mnt/root and /mnt/home respectively. In normal
+operation, Montage uses /home/ngs to store user data and configuration, and
+preset data can be found in /usr/share/yamaha. The front-end itself is
+started by the /usr/bin/daisy-start script.
+
+The FAT32 boot filesystem is left unmounted as damaging this will brick the
+instrument in a way that will require JTAG and cannot be fixed with the
+standard update process.
+
+Remember that if your synthesiser bursts into flames and kills your family
+pet as a result of experiments or modifications gone wrong, you are unlikely
+to elicit much sympathy from Yamaha. I make no warranty and disclaim all
+liability for any damage caused by your use of this code, which I hereby
+dedicate to the public domain.
+
+Please report any problems or bugs to Chris Webb <chris@arachsys.com>.
