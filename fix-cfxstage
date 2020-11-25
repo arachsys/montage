@@ -1,0 +1,19 @@
+#!/bin/sh -e
+
+VERSION=$(head -n 1 /mnt/root/etc/ngs-release)
+if [ "$VERSION" != "3.50.0" ]; then
+  echo "This script only supports Montage firmware version 3.50.0."
+  echo "Warning: the binary file format changes between releases so byte"
+  echo "offsets will need to be verified and updated for new versions."
+  exit 1
+fi >&2
+
+cd /mnt/root/usr/share/yamaha/contents
+if dd if=performance/3F0003-Performance.pfm bs=1 skip=4 count=20 2>/dev/null \
+     | fgrep -q -e "CFX Stage           "; then
+  echo "Fixing CFX Stage preset performance"
+  cp /usr/share/fixed/3F0003-Performance.pfm performance/3F0003-Performance.pfm
+else
+  echo "CFX Stage performance not found: is this supported firmware?" >&2
+  exit 1
+fi

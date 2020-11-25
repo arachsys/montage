@@ -60,6 +60,26 @@ binary file format changes between releases so byte offsets will need to be
 verified and updated for future versions.
 
 
+fix-cfxstage
+------------
+
+CFX Stage is a well-executed reduction of the full four-part CFX Concert
+preset into a single part. Some stray common-level control assignments
+(presumably left over from CFX Concert) have been left pointing into the now
+empty parts two and three. These have no effect on CFX Stage itself, but can
+be a nuisance when additional parts are later added in by the user.
+
+fix-cfxstage removes these stray assignments from the CFX Stage preset.
+/mnt/root must be mounted read-write beforehand, then mounted read-only
+again afterwards to cleanly sync the filesystem:
+
+  mount -o remount,rw /mnt/root
+  fix-cfxstage
+  mount -o remount,ro /mnt/root
+
+It will refuse to run unless the firmware version is exactly 3.50.0.
+
+
 Disclaimer
 ----------
 
