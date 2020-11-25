@@ -80,6 +80,30 @@ again afterwards to cleanly sync the filesystem:
 It will refuse to run unless the firmware version is exactly 3.50.0.
 
 
+fix-cfxstudio
+-------------
+
+CFX PopStudioGrand is the original reduction of CFX Concert into a single
+part piano. It has a lot of rough edges, including harshly discontinuous
+timbre between G5 and G#5 and a misprogrammed half-damper time which leads
+to an unnaturally sudden amplitude drop when half-pedalling.
+
+fix-cfxstudio completely replaces this preset with CFX Studio, a variant of
+CFX Stage modified to be easy to drop into multi-instrument performances. It
+has simplified controller assignments to avoid awkward interactions with the
+rest of a performance, and does not use the variation effect as part of a
+compound reverb, but is otherwise identical to CFX Stage.
+
+/mnt/root must be mounted read-write beforehand, then mounted read-only
+again afterwards to cleanly sync the filesystem:
+
+  mount -o remount,rw /mnt/root
+  fix-cfxstudio
+  mount -o remount,ro /mnt/root
+
+It will refuse to run unless the firmware version is exactly 3.50.0.
+
+
 Disclaimer
 ----------
 
