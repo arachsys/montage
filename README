@@ -1,0 +1,15 @@
+Resources for Yamaha Montage
+============================
+
+docs/ is the Markdown source for https://arachsys.github.io/montage/ with
+links, tools and technical notes for the Montage and related synthesisers.
+
+shell/ has instructions and an image build tree for launching a shell using
+the firmware upgrade path in the instrument's linux/arm32 initramfs. This
+makes tinkering a lot easier, and simple demonstration scripts are included
+to clean up preset part names and fix some buggy preset performances.
+
+See also https://arachsys.github.io/webmidi/ which includes several MIDI
+tools specific to the Montage and MODX instruments.
+
+Please report any problems or bugs to Chris Webb <chris@arachsys.com>.
