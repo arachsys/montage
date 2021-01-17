@@ -19,14 +19,24 @@ requires Chrome/Chromium or another Blink-based browser, although
 Firefox/Gecko may also work with the Jazz plugin and extension.
 
 
+## MIDI messages
+
+Some brief notes on undocumented system exclusive messages supported by the
+instrument are here:
+
+- [System exclusive messages](sysex)
+
+Contributions to these would be very gratefully received.
+
+
 ## File formats
 
-These notes on Motif XF files are largely still relevant for newer Montage
-and MODX files, albeit needing minor changes and additions:
+This information on Motif XF files is largely still relevant for newer
+Montage and MODX files, albeit needing minor changes and additions:
 
 - [Yamaha Motif XF file format](https://gist.github.com/arachsys/2883877)
 
-A long-overdue update of these notes and scripts for Montage is in progress.
+A long-overdue update for Montage is in progress.
 
 
 ## Obtaining a shell
