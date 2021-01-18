@@ -124,6 +124,21 @@ fits in a single chunk and there is only a single reply:
 < f0 43 0n 7f 1c mm mm 02 0d 40 00 00 01 00 00 pp ... pp ss f7
 ```
 
+When decoded, the payload is the song/pattern list in the following format:
+
+```
+nn nn
+00 00 tt tt tt tt ll ll ss ... ss xx xx xx xx
+00 01 tt tt tt tt ll ll ss ... ss xx xx xx xx
+...
+mm mm tt tt tt tt ll ll ss ... ss xx xx xx xx
+```
+
+where _n_ = _m_ + 1 is the number of songs/patterns, _t_ is the store time,
+_l_ is the length of the name `ss ... ss`, and _x_ contains flags including
+arp record and populated pattern scenes. Montage lacks an RTC so uses an
+arbitrary incrementing counter to implement _t_ for date sort.
+
 
 ## Request song/pattern file
 
