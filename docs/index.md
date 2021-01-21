@@ -26,17 +26,22 @@ instrument are here:
 
 - [System exclusive messages](sysex)
 
-Contributions to these would be very gratefully received.
+Contributions to these would be gratefully received.
 
 
-## File formats
+## File format
 
-This information on Motif XF files is largely still relevant for newer
-Montage and MODX files, albeit needing minor changes and additions:
+The Montage X7U/X7L/X7A file format is reverse-engineered and partially
+documented below:
+
+- [Yamaha Montage file format: top-level structure](files/structure)
+
+My 2012 notes on Motif XF files are still available, and may be interesting
+for comparison purposes:
 
 - [Yamaha Motif XF file format](https://gist.github.com/arachsys/2883877)
 
-A long-overdue update for Montage is in progress.
+Again, corrections and additions would be gratefully received.
 
 
 ## Obtaining a shell
