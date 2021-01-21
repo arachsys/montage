@@ -186,14 +186,14 @@ The 6-bytes of flags in the entries are allocated as follows:
       - `0x20`, `0x40`, `0x80` are unused
   - 2 bytes category bitmask
 
-One or more bits are set in the category bitmask corresponding to the
-categories of parts contained in the performance: `0x0001` = Piano, `0x0002`
-= Keyboard, `0x0004` = Organ, etc.
+One or more bits are set in the [category bitmask](categories) corresponding
+to the categories of parts contained in the performance: `0x0001` = Piano,
+`0x0002` = Keyboard, `0x0004` = Organ, etc.
 
-The zero-terminated name string contains the category and subcategory of the
-first part as a decimal integer followed by a ':' and the name of that part,
-for example "`66:FM Hybrid Bass`". This is identical to the _category:name_
-string in the performance data for that part.
+The zero-terminated name string contains the [numeric category and
+subcategory](categories) of the first part followed by a ':' and the name of
+that part, for example "`66:FM Hybrid Bass`". This is identical to the
+_category:name_ string in the performance data for that part.
 
 The zero-terminated title string contains the unprefixed name of the
 performance itself, for example "`FM Hybrid Bass`". Both this name and the
@@ -217,6 +217,10 @@ the first and second user waveforms are `0x00010001` and `0x00010002`.
 
 The six flag bytes are apparently unused apart from byte 3 which contains
 the favourite flag: `0x00` = unset, `0x01` = set.
+
+The zero-terminated name string contains the [numeric category and
+subcategory](categories) followed by a ':' and the waveform name, for
+example "`66:Analog Bass1`".
 
 
 ## System settings ("ESYS")

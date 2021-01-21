@@ -34,12 +34,13 @@ Contributions to these would be gratefully received.
 The Montage X7U/X7L/X7A file format is reverse-engineered and partially
 documented below:
 
-- [Yamaha Montage file format: top-level structure](files/structure)
+- [Top-level structure](files/structure)
+- [Category numbers](files/categories)
 
 My 2012 notes on Motif XF files are still available, and may be interesting
 for comparison purposes:
 
-- [Yamaha Motif XF file format](https://gist.github.com/arachsys/2883877)
+- [Motif XF file format](https://gist.github.com/arachsys/2883877)
 
 Again, corrections and additions would be gratefully received.
 
