@@ -56,8 +56,32 @@ firmware upgrade path in the instrument's initramfs.
 This makes tinkering a lot easier, and simple demo scripts are included to
 clean up preset part names and fix some buggy preset performances.
 
+Montage runs an antediluvian Linux kernel and armhf userspace. Even the
+recent v3.50 firmware has a 3.12.10 armv7l kernel from a vendor tree tagged
+as "`ti2013.12.01`", with a similarly aged glibc 2.19. To build binaries for
+Montage, it may be easier to link statically than find a museum with a
+sufficiently antique toolchain. This is not entirely Yamaha's fault: many
+hardware manufacturers fall for SoC vendors' terrible advice to use their
+'board support' abandonware instead of actively-maintained mainline kernels.
+
 
 ## Hardware notes
+
+The main CPU is a Texas Intruments AM3352 (ARM Cortex-A8, 32-bit ARMv7-A
+architecture) with 256MB of DDR3 SDRAM and 4GB eMMC. The USB-to-device
+interface is that of the AM3352, but the USB-to-host audio/MIDI interface is
+driven by a separate "SSP2" DSP containing a Renesas SH-2A core.
+
+Tone generation and effects are handled by two large "SWP70" ASICs in a
+master/slave configuration with their own SDRAM (48MB and 16MB respectively)
+and 4GB of direct-connected NAND flash for wave data. The CPU, SWP70s and
+SSP2 are interconnected both by the main address/data bus and also by I2S.
+
+Embedded Linux hackers should probably think of Montage as a Beaglebone
+Black with 4GB eMMC, 256MB RAM, and some exotic DSP peripherals which have
+their own 4GB of flash storage for wave data.
+
+Some additional information is here:
 
 - [Foot controllers](pedals)
 
@@ -66,6 +90,7 @@ answer questions. These can be purchased in PDF format direct from Yamaha
 24x7 in the US. However, Yamaha UK Parts are less helpful, only supplying
 manuals to 'authorised service engineers' to maintain a profitable but
 user-hostile monopoly.
+
 
 ## Contact
 
