@@ -92,7 +92,11 @@ manuals to 'authorised service engineers' to maintain a profitable but
 user-hostile monopoly.
 
 
-## Contact
+## Contact and discussion
 
 Please send any questions, corrections or other contributions to
 Chris Webb \<[chris@arachsys.com](mailto:chris@arachsys.com)>.
+
+[GitHub discussions](https://github.com/arachsys/montage/discussions) are
+also enabled for this repository to provide a more public forum to chat
+about Montage from a technical perspective.
