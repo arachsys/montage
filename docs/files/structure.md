@@ -24,10 +24,10 @@ these binary files induces unexpected 1980s flashbacks.
 The file header looks like:
 
 ```
-00000000  59 41 4d 41 48 41 2d 59  53 46 43 00 00 00 00 00  |YAMAHA-YSFC.....|
-00000010  34 2e 30 2e 35 00 00 00  00 00 00 00 00 00 00 00  |4.0.5...........|
-00000020  nn nn nn nn ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-00000030  ll ll ll ll ff ff ff ff  ff ff ff ff tt tt tt tt  |................|
+0x00  59 41 4d 41 48 41 2d 59  53 46 43 00 00 00 00 00  |YAMAHA-YSFC.....|
+0x10  34 2e 30 2e 35 00 00 00  00 00 00 00 00 00 00 00  |4.0.5...........|
+0x20  nn nn nn nn ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+0x30  ll ll ll ll ff ff ff ff  ff ff ff ff tt tt tt tt  |................|
 ```
 
 File version "`4.0.5`" is current for Montage firmware v3.00 and v3.50. File
@@ -48,12 +48,12 @@ eight byte entries, each being the four byte identifier followed by the
 Here is an example catalogue from an empty X7L file:
 
 ```
-00000040  45 50 46 4d 00 00 00 f1  44 50 46 4d 00 00 00 fd  |EPFM....DPFM....|
-00000050  45 57 46 4d 00 00 01 09  44 57 46 4d 00 00 01 15  |EWFM....DWFM....|
-00000060  45 57 49 4d 00 00 01 21  44 57 49 4d 00 00 01 2d  |EWIM...!DWIM...-|
-00000070  45 41 52 50 00 00 01 39  44 41 52 50 00 00 01 45  |EARP...9DARP...E|
-00000080  45 43 52 56 00 00 01 51  44 43 52 56 00 00 01 5d  |ECRV...QDCRV...]|
-00000090  45 4c 53 54 00 00 01 69  44 4c 53 54 00 00 01 75  |ELST...iDLST...u|
+0x40  45 50 46 4d 00 00 00 f1  44 50 46 4d 00 00 00 fd  |EPFM....DPFM....|
+0x50  45 57 46 4d 00 00 01 09  44 57 46 4d 00 00 01 15  |EWFM....DWFM....|
+0x60  45 57 49 4d 00 00 01 21  44 57 49 4d 00 00 01 2d  |EWIM...!DWIM...-|
+0x70  45 41 52 50 00 00 01 39  44 41 52 50 00 00 01 45  |EARP...9DARP...E|
+0x80  45 43 52 56 00 00 01 51  44 43 52 56 00 00 01 5d  |ECRV...QDCRV...]|
+0x90  45 4c 53 54 00 00 01 69  44 4c 53 54 00 00 01 75  |ELST...iDLST...u|
 ```
 
 
@@ -66,12 +66,12 @@ all library slots are empty, it consists of 80 `0xff` bytes followed by a
 single `0x00` byte, this length of 81 being declared in the file header:
 
 ```
-000000a0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-000000b0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-000000c0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-000000d0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-000000e0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
-000000f0  00                                                |.|
+0xa0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+0xb0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+0xc0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+0xd0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+0xe0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+0xf0  00                                                |.|
 ```
 
 A self-contained X7U or X7L won't refer to waveforms, arpeggios or curves
@@ -89,10 +89,10 @@ data for each library.
 After the catalogue and padding, the blocks listed in the catalogue follow
 one by one until the end of the file. Each block has the following format:
 
-- 4 bytes identifier, e.g. "`EPFM`"
-- 32-bit remaining length of the block (_n_ + 4)
-- 32-bit count of `Entr` or `Data` items in the block (_k_)
-- _n_ byte payload of _k_ `Entr` or `Data` chunks
+  - `0x00`: 4 bytes identifier, e.g. "`EPFM`"
+  - `0x04`: 32-bit remaining length of the block (_n_ + 4)
+  - `0x08`: 32-bit count of `Entr` or `Data` items in the block (_k_)
+  - `0x0c`: _n_ byte payload of _k_ `Entr` or `Data` chunks
 
 There are two types of blocks, present in matching pairs. An _entry list_
 has type beginning with 'E', e.g. "`EPFM`", and its corresponding _data
@@ -105,16 +105,16 @@ preceed the 'D' block in the file; order doesn't seem to matter otherwise.
 Following the 12-byte block header, an entry list concatenates zero or more
 entries of the form:
 
-  - 4 bytes magic "`Entr`"
-  - 32-bit length of this entry excluding these first 8 bytes
-  - 32-bit size of the item corresponding to this entry
-  - 32-bit offset of the item chunk within the data block
-  - 32-bit program number --- type specific
-  - 6 bytes of flags --- type specific
-  - 32-bit time stamp for date-ordering
-  - zero-terminated item name
-  - zero-terminated title --- type specific, only non-empty for `EPFM`
-  - optional additional data --- type specific, only used by `EPFM`
+  - `0x00`: 4 bytes magic "`Entr`"
+  - `0x04`: 32-bit length of this entry excluding these first 8 bytes
+  - `0x08`: 32-bit size of the item corresponding to this entry
+  - `0x0c`: 32-bit offset of the item chunk within the data block
+  - `0x10`: 32-bit program number --- type specific
+  - `0x14`: 6 bytes of flags --- type specific
+  - `0x1a`: 32-bit time stamp for date-ordering
+  - `0x1e`: zero-terminated item name
+  - `0x??`: zero-terminated title --- type specific, only non-empty for `EPFM`
+  - `0x??`: optional additional data --- type specific, only used by `EPFM`
 
 The number of entries must match the count described in the entry list
 header and the number of items in the corresponding data block.
@@ -130,9 +130,9 @@ least-significant 16-bits. Some exceptions to this are described below.
 Following the 12-byte block header, a data block concatenates zero or more
 item chunks of the form:
 
-  - 4 bytes magic "`Data`"
-  - 32-bit size of this item (_n_)
-  - _n_ bytes of data for this item
+  - `0x00`: 4 bytes magic "`Data`"
+  - `0x04`: 32-bit size of this item (_n_)
+  - `0x08`: _n_ bytes of data for this item
 
 The number of items must match the count described in the block header, and
 _n_ must match the item size stored in the entry list for this item.
