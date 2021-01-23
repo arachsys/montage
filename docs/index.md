@@ -36,6 +36,7 @@ documented below:
 
 - [Top-level structure](files/structure)
 - [Category numbers](files/categories)
+- [Example programs](https://github.com/arachsys/montage/tree/main/files)
 
 My 2012 notes on Motif XF files are still available, and may be interesting
 for comparison purposes:

@@ -1,0 +1,48 @@
+#!/bin/python
+
+import mmap
+import struct
+import sys
+
+def blocks(file):
+  if file[0:16].rstrip(b'\x00') != b'YAMAHA-YSFC':
+    raise ValueError('Invalid file format')
+  if file[16:32].rstrip(b'\x00') not in [ b'4.0.5', b'5.0.1' ]:
+    raise ValueError('Unsupported file version')
+  catalogue = file[64 : 64 + struct.unpack_from('>I', file, 32)[0]]
+  return dict(struct.iter_unpack('>4sI', catalogue))
+
+def items(file, offset):
+  if offset is not None:
+    size, count = struct.unpack_from('>2I', file, offset + 4)
+    offset = offset + 12
+    while count > 0 and size > 0:
+      length = struct.unpack_from('>I', file, offset + 4)[0] + 8
+      yield file[offset : offset + length]
+      count, offset, size = count - 1, offset + length, size - length
+
+def die(error):
+  print(getattr(error, 'strerror', str(error)), file = sys.stderr)
+  sys.exit(1)
+
+sys.excepthook = lambda type, error, trace: die(error)
+
+for filename in sys.argv[1:]:
+  with open(filename, 'rb') as file:
+    file = mmap.mmap(file.fileno(), 0, access = mmap.ACCESS_READ)
+    for entry in items(file, blocks(file).get(b'EPFM')):
+      title = entry[30:].split(b'\x00', 2)[1].decode().rstrip()
+      id = struct.unpack_from('>I', entry, 16)[0]
+      if len(sys.argv) > 2:
+        print(filename, end = ': ')
+      if 0x3f0000 <= id <= 0x3f1f7f:
+        id = (id & 0x7f) + (id >> 1 & 0x3f80)
+        print("Pre %04d: %s" % (id + 1, title))
+      elif 0x3f2000 <= id <= 0x3f247f:
+        id = (id & 0x7f) + (id >> 1 & 0x3f80) - 0x1000
+        print("User %03d: %s" % (id + 1, title))
+      elif 0x3f2800 <= id <= 0x3f4f7f:
+        id = (id & 0x7f) + (id >> 1 & 0x3f80) - 0x1400
+        print("Lib%d %03d: %s" % (id / 640 + 1, id % 640 + 1, title))
+      else:
+        print("%08x: %s" % (id, title))
