@@ -3,7 +3,7 @@ Tools for examining Yamaha Montage and MODX files
 
 These four example programs catalogue the content of Yamaha Montage and MODX
 files, supporting X7U, X7L and X7A files from Montage firmware v3.00/3.50
-and X8U, X8L and X8A files MODX firmware v2.00/2.50/2.51.
+and X8U, X8L and X8A files from MODX firmware v2.00/2.50/2.51.
 
   - listarp [FILE]... : list arpeggios
   - listcrv [FILE]... : list motion curves
@@ -17,7 +17,7 @@ It takes very little code to robustly and efficiently parse these files:
 most of the fifty lines of each of these scripts is taken with pretty
 printing and boilerplate.
 
-The Montage X7U/X7L/X7A file format is reverse-engineered and partially
+The X7U/X7L/X7A and X8U/X8L/X8A format is reverse-engineered and partially
 documented on my pages at https://arachsys.github.io/montage/ which also has
 notes on the hardware and undocumented system exclusive messages.
 

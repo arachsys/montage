@@ -31,8 +31,8 @@ Contributions to these would be gratefully received.
 
 ## File format
 
-The Montage X7U/X7L/X7A file format is reverse-engineered and partially
-documented below:
+Montage X7U/X7L/X7A and MODX X8U/X8L/X8A file formats are reverse-engineered
+and partially documented below:
 
 - [Top-level structure](files/structure)
 - [Category numbers](files/categories)

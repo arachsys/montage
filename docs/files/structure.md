@@ -1,9 +1,14 @@
 # [Yamaha Montage](/montage/) file format: top-level structure
 
-X7U, X7L and X7A files all have an identical structure, but dump different
-subsets of the Montage's storage. In particular, to load an X7L file into
-the user bank, just rename the file with an X7U extension. Similarly, to
-load an X7U file into a library slot, just rename it with an X7L extension.
+Montage X7U, X7L and X7A files all have an identical structure, but dump
+different subsets of the internal storage. In particular, to load an X7L
+file into the user bank, just rename the file with an X7U extension.
+Similarly, to load an X7U file into a library slot, just rename it with an
+X7L extension.
+
+MODX X8U, X8L and X8A files also have the structure described in this
+document, apart from the different extension and file version in the header.
+The detailed content of some of the data blocks may differ, however.
 
 Unless otherwise specified, in what follows all indices are zero-based, all
 sizes, lengths and offsets are bytes, and integers are in big-endian order.
@@ -25,8 +30,8 @@ The file header looks like:
 00000030  ll ll ll ll ff ff ff ff  ff ff ff ff tt tt tt tt  |................|
 ```
 
-This version ("`4.0.5`") is current for Montage firmware versions 3.00 and
-3.50.
+File version "`4.0.5`" is current for Montage firmware v3.00 and v3.50. File
+version "`5.0.1`" is used by MODX firmware v2.00, v2.50 and v2.51.
 
 _n_ is the size of the catalogue which follows the header, _l_ is the size
 of the library info immediately after the catalogue, and _t_ - 1 is the most
