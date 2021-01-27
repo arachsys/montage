@@ -1,0 +1,72 @@
+#!/bin/python
+
+import mmap
+import struct
+import sys
+
+def blocks(file):
+  if file[0:16].rstrip(b'\x00') != b'YAMAHA-YSFC':
+    raise ValueError('Invalid file format')
+  if file[16:32].rstrip(b'\x00') not in [ b'4.0.5', b'5.0.1' ]:
+    raise ValueError('Unsupported file version')
+  catalogue = file[64 : 64 + struct.unpack_from('>I', file, 32)[0]]
+  return dict(struct.iter_unpack('>4sI', catalogue))
+
+def items(file, offset):
+  if offset is not None:
+    size, count = struct.unpack_from('>2I', file, offset + 4)
+    offset = offset + 12
+    while count > 0 and size > 0:
+      length = struct.unpack_from('>I', file, offset + 4)[0] + 8
+      yield file[offset : offset + length]
+      count, offset, size = count - 1, offset + length, size - length
+
+def string(file, offset):
+  finish = file.find(b'\x00', offset)
+  finish = finish if finish >= offset else None
+  return file[offset : finish].decode(errors = 'replace').rstrip()
+
+def die(error):
+  print(getattr(error, 'strerror', str(error)), file = sys.stderr)
+  sys.exit(1)
+
+sys.excepthook = lambda type, error, trace: die(error)
+
+for filename in sys.argv[1:]:
+  if len(sys.argv) > 2:
+    print('File %s:' % filename)
+  with open(filename, 'rb') as file:
+    file = mmap.mmap(file.fileno(), 0, access = mmap.ACCESS_READ)
+    entries, data = map(blocks(file).get, [b'ELST', b'DLST'])
+    for entry in items(file, entries):
+      size, offset, bank, id = struct.unpack_from('>2I2H', entry, 8)
+      if bank <= 1:
+        print('User %d: %s' % (id + 1, string(entry, 30)))
+      else:
+        print('Lib%d %d: %s' % (bank - 1, id + 1, string(entry, 30)))
+
+      for offset in range(offset + 33, offset + size, 4597):
+        slots = range(offset + 21, offset + 4597, 286)
+        if all(file[data + offset + 26] == 0 for offset in slots):
+          continue
+
+        print('  %s' % string(file, data + offset))
+        for offset in slots:
+          if file[data + offset + 26] == 0:
+            continue
+
+          msb, lsb, id = struct.unpack_from('3B', file, data + offset + 22)
+          if msb == 0x40 and lsb <= 0x1f and id <= 0x7f:
+            id = 'Pre %04d' % ((lsb << 7) + id + 1)
+          elif msb == 0x40 and lsb <= 0x24 and id <= 0x7f:
+            id = 'User %03d' % ((lsb - 0x20 << 7) + id + 1)
+          elif msb == 0x40 and 0x28 <= lsb <= 0x4f and id <= 0x7f:
+            id = 'Lib%d %03d' % (lsb / 5 - 7, (lsb % 5 << 7) + id + 1)
+          else:
+            id = '%04x%02x%02x' % (msb, lsb, id)
+
+          title = string(file, data + offset)
+          if title:
+            print('    %s: %s' % (id, title))
+          else:
+            print('    %s' % id)

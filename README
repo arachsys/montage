@@ -4,6 +4,9 @@ Resources for Yamaha Montage
 docs/ is the Markdown source for https://arachsys.github.io/montage/ with
 links, tools and technical notes for the Montage and related synthesisers.
 
+files/ contains some demonstration Python scripts to list the contents of
+Montage X7U/X7L/X7A and MODX X8U/X8L/X8A files.
+
 shell/ has instructions and an image build tree for launching a shell using
 the firmware upgrade path in the instrument's linux/arm32 initramfs. This
 makes tinkering a lot easier, and simple demonstration scripts are included
