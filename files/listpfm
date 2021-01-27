@@ -32,17 +32,15 @@ for filename in sys.argv[1:]:
     file = mmap.mmap(file.fileno(), 0, access = mmap.ACCESS_READ)
     for entry in items(file, blocks(file).get(b'EPFM')):
       title = entry[30:].split(b'\x00', 2)[1].decode().rstrip()
-      id = struct.unpack_from('>I', entry, 16)[0]
+      msb, lsb, id = struct.unpack_from('>HBB', entry, 16)
+      if msb == 0x003f and lsb <= 0x1f and id <= 0x7f:
+        id = 'Pre %04d' % ((lsb << 7) + id + 1)
+      elif msb == 0x003f and lsb <= 0x24 and id <= 0x7f:
+        id = 'User %03d' % ((lsb - 0x20 << 7) + id + 1)
+      elif msb == 0x003f and 0x28 <= lsb <= 0x4f and id <= 0x7f:
+        id = 'Lib%d %03d' % (lsb / 5 - 7, (lsb % 5 << 7) + id + 1)
+      else:
+        id = '%04x%02x%02x' % (msb, lsb, id)
       if len(sys.argv) > 2:
         print(filename, end = ': ')
-      if 0x3f0000 <= id <= 0x3f1f7f:
-        id = (id & 0x7f) + (id >> 1 & 0x3f80)
-        print("Pre %04d: %s" % (id + 1, title))
-      elif 0x3f2000 <= id <= 0x3f247f:
-        id = (id & 0x7f) + (id >> 1 & 0x3f80) - 0x1000
-        print("User %03d: %s" % (id + 1, title))
-      elif 0x3f2800 <= id <= 0x3f4f7f:
-        id = (id & 0x7f) + (id >> 1 & 0x3f80) - 0x1400
-        print("Lib%d %03d: %s" % (id / 640 + 1, id % 640 + 1, title))
-      else:
-        print("%08x: %s" % (id, title))
+      print(id, title, sep = ': ')

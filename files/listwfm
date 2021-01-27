@@ -34,14 +34,12 @@ for filename in sys.argv[1:]:
     for entry in items(file, blocks(file).get(b'EWFM')):
       title = entry[30:].split(b'\x00', 2)[0].decode().rstrip()
       title = re.sub(r'^\d+:', '', title)
-      id = struct.unpack_from('>I', entry, 16)[0]
+      bank, id = struct.unpack_from('>2H', entry, 16)
       if len(sys.argv) > 2:
         print(filename, end = ': ')
-      if id >> 16 == 0:
-        print("Pre %05d: %s" % (id & 0xffff, title))
-      elif id >> 16 == 1:
-        print("User %04d: %s" % (id & 0xffff, title))
-      elif id >> 16 <= 9:
-        print("Lib%d %04d: %s" % ((id >> 16) - 1, id & 0xffff, title))
+      if bank == 1:
+        print('User %04d: %s' % (id, title))
+      elif bank <= 9:
+        print('Lib%d %04d: %s' % (bank - 1, id, title))
       else:
-        print("%08x: %s" % (id, title))
+        print('%04x%04x: %s' % (bank, id, title))
