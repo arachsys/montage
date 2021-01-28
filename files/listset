@@ -34,39 +34,36 @@ sys.excepthook = lambda type, error, trace: die(error)
 
 for filename in sys.argv[1:]:
   if len(sys.argv) > 2:
-    print('File %s:' % filename)
+    print(f'File {filename}:')
   with open(filename, 'rb') as file:
     file = mmap.mmap(file.fileno(), 0, access = mmap.ACCESS_READ)
     entries, data = map(blocks(file).get, [b'ELST', b'DLST'])
     for entry in items(file, entries):
       size, offset, bank, id = struct.unpack_from('>2I2H', entry, 8)
-      if bank <= 1:
-        print('User %d: %s' % (id + 1, string(entry, 30)))
-      else:
-        print('Lib%d %d: %s' % (bank - 1, id + 1, string(entry, 30)))
+      print('User' if bank <= 1 else f'Lib{bank - 1}', end = ': ')
+      print(string(entry, 30))
 
       for offset in range(offset + 33, offset + size, 4597):
         slots = range(offset + 21, offset + 4597, 286)
         if all(file[data + offset + 26] == 0 for offset in slots):
           continue
 
-        print('  %s' % string(file, data + offset))
+        print(2 * ' ' + string(file, data + offset))
         for offset in slots:
           if file[data + offset + 26] == 0:
             continue
 
           msb, lsb, id = struct.unpack_from('3B', file, data + offset + 22)
           if msb == 0x40 and lsb <= 0x1f and id <= 0x7f:
-            id = 'Pre %04d' % ((lsb << 7) + id + 1)
+            id = f'Pre {(lsb << 7) + id + 1:04}'
           elif msb == 0x40 and lsb <= 0x24 and id <= 0x7f:
-            id = 'User %03d' % ((lsb - 0x20 << 7) + id + 1)
+            id = f'User {(lsb - 0x20 << 7) + id + 1:03}'
           elif msb == 0x40 and 0x28 <= lsb <= 0x4f and id <= 0x7f:
-            id = 'Lib%d %03d' % (lsb / 5 - 7, (lsb % 5 << 7) + id + 1)
+            id = f'Lib{lsb / 5 - 7} {(lsb % 5 << 7) + id + 1:03}'
           else:
-            id = '%04x%02x%02x' % (msb, lsb, id)
+            id = f'{msb:04x}{lsb:02x}{id:02x}'
 
           title = string(file, data + offset)
           if title:
-            print('    %s: %s' % (id, title))
-          else:
-            print('    %s' % id)
+            id = f'{id}: {title}'
+          print(4 * ' ' + id)

@@ -34,13 +34,13 @@ for filename in sys.argv[1:]:
       title = entry[30:].split(b'\x00', 2)[1].decode().rstrip()
       msb, lsb, id = struct.unpack_from('>HBB', entry, 16)
       if msb == 0x003f and lsb <= 0x1f and id <= 0x7f:
-        id = 'Pre %04d' % ((lsb << 7) + id + 1)
+        id = f'Pre {(lsb << 7) + id + 1:04}'
       elif msb == 0x003f and lsb <= 0x24 and id <= 0x7f:
-        id = 'User %03d' % ((lsb - 0x20 << 7) + id + 1)
+        id = f'User {(lsb - 0x20 << 7) + id + 1:03}'
       elif msb == 0x003f and 0x28 <= lsb <= 0x4f and id <= 0x7f:
-        id = 'Lib%d %03d' % (lsb / 5 - 7, (lsb % 5 << 7) + id + 1)
+        id = f'Lib{lsb / 5 - 7} {(lsb % 5 << 7) + id + 1:03}'
       else:
-        id = '%04x%02x%02x' % (msb, lsb, id)
+        id = f'{msb:04x}{lsb:02x}{id:02x}'
       if len(sys.argv) > 2:
         print(filename, end = ': ')
       print(id, title, sep = ': ')

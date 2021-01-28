@@ -38,8 +38,8 @@ for filename in sys.argv[1:]:
       if len(sys.argv) > 2:
         print(filename, end = ': ')
       if bank == 1:
-        print('User %03d: %s' % (id + 1, title))
+        print(f'User {id + 1:03}: {title}')
       elif bank <= 9:
-        print('Lib%d %03d: %s' % (bank - 1, id + 1, title))
+        print(f'Lib{bank - 1} {id + 1:03}: {title}')
       else:
-        print('%04x%04x: %s' % (bank, id, title))
+        print(f'{bank:04x}{id:04x}: {title}')
