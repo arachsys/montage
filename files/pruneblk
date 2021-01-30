@@ -1,0 +1,53 @@
+#!/bin/python
+
+import mmap
+import struct
+import sys
+
+def blocks(file):
+  if file[0:16].rstrip(b'\x00') != b'YAMAHA-YSFC':
+    raise ValueError('Invalid file format')
+  if file[16:32].rstrip(b'\x00') not in [ b'4.0.5', b'5.0.1' ]:
+    raise ValueError('Unsupported file version')
+  catalogue = file[64 : 64 + struct.unpack_from('>I', file, 32)[0]]
+  for kind, start in struct.iter_unpack('>4sI', catalogue):
+    yield kind, start, struct.unpack_from('>I', file, start + 4)[0] + 8
+
+def die(error):
+  print(getattr(error, 'strerror', str(error)), file = sys.stderr)
+  sys.exit(1)
+
+sys.excepthook = lambda type, error, trace: die(error)
+if len(sys.argv) < 2:
+  die(f'Usage: {sys.argv[0]} TYPE[,TYPE]... [FILE]...')
+
+prune = sys.argv[1].encode().upper().split(b',')
+
+for filename in sys.argv[2:]:
+  with open(filename, 'r+b') as file:
+    view = mmap.mmap(file.fileno(), 0, access = mmap.ACCESS_WRITE)
+    catalogue = filter(lambda blk: blk[0][1:] not in prune, blocks(view))
+    catalogue = sorted(catalogue, key = lambda blk: blk[1])
+
+    length = struct.unpack_from('>I', view, 48)[0]
+    if length >= 81 and b'LIB' in prune:
+      libraries = 80 * b'\xff' + b'\x00'
+    else:
+      offset = 64 + struct.unpack_from('>I', view, 32)[0]
+      libraries = view[offset : offset + length]
+
+    struct.pack_into('>I', view, 32, 8*len(catalogue))
+    struct.pack_into('>I', view, 48, len(libraries))
+
+    offset, size = 64, 64 + 8 * len(catalogue) + len(libraries)
+    for kind, start, length in catalogue:
+      struct.pack_into('>4sI', view, offset, kind, size)
+      offset, size = offset + 8, size + length
+
+    view.seek(offset)
+    offset = offset + view.write(libraries)
+
+    for kind, start, length in catalogue:
+      view.move(offset, start, length)
+      offset = offset + length
+    file.truncate(size)

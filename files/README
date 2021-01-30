@@ -22,6 +22,16 @@ overall volume of every performance and live set:
 The scale factor can be given in percentage ("85%"), decimal ("1.05") or
 fractional ("80/67") form.
 
+To prune unneeded content out of files, use
+
+  - pruneblk TYPE[,TYPE]... [FILE]...
+
+which removes the specified block types. TYPE is not case-sensitive and
+should be 'xxx' to remove 'Exxx' and 'Dxxx' blocks, or 'LIB' to clear
+installed library info. For example, 'pruneblk sys,sng,lib Test.X7U' removes
+system settings, songs and library info from Test.X7U. (Pruning the system
+settings prevents them being clobbered on reload of user or backup files.)
+
 It takes very little code to robustly and efficiently parse these files:
 most of the fifty lines of each of these scripts is taken with pretty
 printing and boilerplate.
