@@ -1,0 +1,60 @@
+#!/bin/python
+
+import mmap
+import struct
+import sys
+
+def blocks(file):
+  if file[0:16].rstrip(b'\x00') != b'YAMAHA-YSFC':
+    raise ValueError('Invalid file format')
+  if file[16:32].rstrip(b'\x00') not in [ b'4.0.5', b'5.0.1' ]:
+    raise ValueError('Unsupported file version')
+  catalogue = file[64 : 64 + struct.unpack_from('>I', file, 32)[0]]
+  return dict(struct.iter_unpack('>4sI', catalogue))
+
+def items(file, offset):
+  if offset is not None:
+    size, count = struct.unpack_from('>2I', file, offset + 4)
+    offset = offset + 12
+    while count > 0 and size > 0:
+      length = struct.unpack_from('>I', file, offset + 4)[0] + 8
+      yield file[offset : offset + length]
+      count, offset, size = count - 1, offset + length, size - length
+
+def die(error):
+  print(getattr(error, 'strerror', str(error)), file = sys.stderr)
+  sys.exit(1)
+
+sys.excepthook = lambda type, error, trace: die(error)
+if len(sys.argv) < 2:
+  die(f'Usage: {sys.argv[0]} SCALE-FACTOR [FILE]...')
+
+try:
+  if sys.argv[1][-1] == '%':
+    scale = float(sys.argv[1][:-1]) / 100
+  elif '/' in sys.argv[1]:
+    scale = sys.argv[1].partition('/')
+    scale = float(scale[0])/float(scale[2])
+  else:
+    scale = float(sys.argv[1])
+  assert scale >= 0
+except:
+  die(f'Invalid scale factor: {sys.argv[1]}')
+
+for filename in sys.argv[2:]:
+  with open(filename, 'r+b') as file:
+    file = mmap.mmap(file.fileno(), 0, access = mmap.ACCESS_WRITE)
+    entries, data = map(blocks(file).get, [b'EPFM', b'DPFM'])
+    for entry in items(file, entries):
+      size, offset = struct.unpack_from('>2I', entry, 8)
+      volume = file[data + offset + 47] * scale
+      file[data + offset + 47] = min(int(volume), 127)
+
+    entries, data = map(blocks(file).get, [b'ELST', b'DLST'])
+    for entry in items(file, entries):
+      size, offset = struct.unpack_from('>2I', entry, 8)
+      for page in range(offset + 33, offset + size, 4597):
+        for slot in range(page + 21, page + 4597, 286):
+          if file[data + slot + 26] != 0:
+            volume = file[data + slot + 25] * scale
+            file[data + slot + 25] = min(int(volume), 127)
