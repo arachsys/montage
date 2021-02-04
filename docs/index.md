@@ -82,15 +82,20 @@ Embedded Linux hackers should probably think of Montage as a Beaglebone
 Black with 4GB eMMC, 256MB RAM, and some exotic DSP peripherals which have
 their own 4GB of flash storage for wave data.
 
-Some additional information is here:
-
-- [Foot controllers](pedals)
-
 I have a Montage 8 service manual (including schematics) and am happy to
 answer questions. These can be purchased in PDF format direct from Yamaha
 24x7 in the US. However, Yamaha UK Parts are less helpful, only supplying
 manuals to 'authorised service engineers' to maintain a profitable but
 user-hostile monopoly.
+
+
+## Other information
+
+Some additional information on electrical compatibility of controller
+pedals, capturing screenshots and attaching external displays is below:
+
+- [Foot controllers](pedals)
+- [Undocumented features](extras)
 
 
 ## Contact and discussion
