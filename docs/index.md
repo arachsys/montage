@@ -97,6 +97,20 @@ pedals, capturing screenshots and attaching external displays is below:
 - [Foot controllers](pedals)
 - [Undocumented features](extras)
 
+The official documentation corresponding to Montage version 3.50 can be
+found at:
+
+- [Owner's manual](https://usa.yamaha.com/files/download/other_assets/7/812097/montage_en_om_b0.pdf) --- 13.3MB
+- [Reference manual](https://usa.yamaha.com/files/download/other_assets/9/812529/montage_en_rm_a0.pdf) --- 17.2MB
+- [Supplementary manual](https://usa.yamaha.com/files/download/other_assets/2/960092/montage_en_sm_h0.pdf) --- 4.2MB
+- [Data list](https://usa.yamaha.com/files/download/other_assets/9/1341759/montage_en_dl_j0.pdf) --- 5.3MB
+- [Parameter manual](https://usa.yamaha.com/files/download/other_assets/1/812531/synthesizer_en_pm_c0.pdf) --- 752kB
+
+Firmware images can be found here:
+
+- [Montage v3.50](https://usa.yamaha.com/files/download/software/6/1342016/montage350.zip) --- 129MB
+- [Montage v3.00](https://usa.yamaha.com/files/download/software/8/1302698/montage300-2.zip) --- 180MB
+
 
 ## Contact and discussion
 
