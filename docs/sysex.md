@@ -2,7 +2,7 @@
 
 ## Documented messages
 
-The most recent data list corresponding to Montage firmware version 3.50 can
+The most recent data list corresponding to Montage firmware version 3.51 can
 be found at:
 
   - <https://usa.yamaha.com/files/download/other_assets/9/1341759/montage_en_dl_j0.pdf>
@@ -176,24 +176,24 @@ possible to send songs or patterns back to the instrument over MIDI.
 ## Unknown requests
 
 Montage Connect polls parameter `0a 00 00` every second, receiving a single
-byte in response, apparently always zero from my Montage 8 v3.50:
+byte in response, apparently always zero from my Montage 8 v3.51:
 
 ```
 > f0 43 30 7f 1c 02 0a 00 00 f7
 < f0 43 10 7f 1c 02 0a 00 00 00 f7
 ```
 
-It also makes a bulk request for `0b 00 00`, receiving payload `03 05 00 00
-00 01 04 00` in response on my Montage 8 v3.50:
+It also makes a bulk request for `0b 00 00`, receiving payload `03 05 01 00
+00 01 04 00` in response on my Montage 8 v3.51:
 
 ```
 > f0 43 20 7f 1c 02 0b 00 00 f7
-< f0 43 00 7f 1c 00 0c 02 0b 00 00 03 05 00 00 00 01 04 00 66 f7
+< f0 43 00 7f 1c 00 0c 02 0b 00 00 03 05 01 00 00 01 04 00 65 f7
 ```
 
-The `03 05 00 00` looks suspiciously like the decimal digits of the firmware
-version 3.50.0, but it's unclear what `00 01 04 00` encodes --- perhaps the
-keyboard size or hardware version?
+The `03 05 01 00` contains the decimal digits of the firmware version
+3.51.0, but it's unclear what `00 01 04 00` encodes --- perhaps the keyboard
+size or hardware version?
 
 
 ## Help needed

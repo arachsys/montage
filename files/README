@@ -2,8 +2,8 @@ Tools for examining Yamaha Montage and MODX files
 =================================================
 
 These five example programs catalogue the content of Yamaha Montage and MODX
-files, supporting X7U, X7L and X7A files from Montage firmware v3.00/3.50
-and X8U, X8L and X8A files from MODX firmware v2.00/2.50/2.51:
+files, supporting X7U, X7L and X7A files from Montage firmware v3.00 to
+v3.51 and X8U, X8L and X8A files from MODX firmware v2.00 to v2.52:
 
   - listarp [FILE]... : list arpeggios
   - listcrv [FILE]... : list motion curves

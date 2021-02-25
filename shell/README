@@ -55,7 +55,7 @@ then mounted read-only again afterwards to cleanly sync the filesystem:
   fix-presets
   mount -o remount,ro /mnt/root
 
-It will refuse to run unless the firmware version is exactly 3.50.0. The
+It will refuse to run unless the firmware version is exactly 3.51.0. The
 binary file format changes between releases so byte offsets will need to be
 verified and updated for future versions.
 
@@ -77,7 +77,7 @@ again afterwards to cleanly sync the filesystem:
   fix-cfxstage
   mount -o remount,ro /mnt/root
 
-It will refuse to run unless the firmware version is exactly 3.50.0.
+It will refuse to run unless the firmware version is exactly 3.51.0.
 
 
 fix-cfxstudio
@@ -101,7 +101,7 @@ again afterwards to cleanly sync the filesystem:
   fix-cfxstudio
   mount -o remount,ro /mnt/root
 
-It will refuse to run unless the firmware version is exactly 3.50.0.
+It will refuse to run unless the firmware version is exactly 3.51.0.
 
 
 Disclaimer

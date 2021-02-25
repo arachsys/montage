@@ -30,8 +30,8 @@ The file header looks like:
 0x30  ll ll ll ll ff ff ff ff  ff ff ff ff tt tt tt tt  |................|
 ```
 
-File version "`4.0.5`" is current for Montage firmware v3.00 and v3.50. File
-version "`5.0.1`" is used by MODX firmware v2.00, v2.50 and v2.51.
+File version "`4.0.5`" is current for Montage firmware v3.00 to v3.51. File
+version "`5.0.1`" is used by MODX firmware v2.00 to v2.52.
 
 _n_ is the size of the catalogue which follows the header, _l_ is the size
 of the library info immediately after the catalogue, and _t_ - 1 is the most

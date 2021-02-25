@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 VERSION=$(head -n 1 /mnt/root/etc/ngs-release)
-if [ "$VERSION" != "3.50.0" ]; then
-  echo "This script only supports Montage firmware version 3.50.0."
+if [ "$VERSION" != "3.51.0" ]; then
+  echo "This script only supports Montage firmware version 3.51.0."
   echo "Warning: the binary file format changes between releases so byte"
   echo "offsets will need to be verified and updated for new versions."
   exit 1

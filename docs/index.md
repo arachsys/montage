@@ -58,7 +58,7 @@ This makes tinkering a lot easier, and simple demo scripts are included to
 clean up preset part names and fix some buggy preset performances.
 
 Montage runs an antediluvian Linux kernel and armhf userspace. Even the
-recent v3.50 firmware has a 3.12.10 armv7l kernel from a vendor tree tagged
+recent v3.51 firmware has a 3.12.10 armv7l kernel from a vendor tree tagged
 as "`ti2013.12.01`", with a similarly aged glibc 2.19. To build binaries for
 Montage, it may be easier to link statically than find a museum with a
 sufficiently antique toolchain. This is not entirely Yamaha's fault: many
@@ -97,7 +97,7 @@ pedals, capturing screenshots and attaching external displays is below:
 - [Foot controllers](pedals)
 - [Undocumented features](extras)
 
-The official documentation corresponding to Montage version 3.50 can be
+The official documentation corresponding to Montage version 3.51 can be
 found at:
 
 - [Owner's manual](https://usa.yamaha.com/files/download/other_assets/7/812097/montage_en_om_b0.pdf) --- 13.3MB
@@ -108,6 +108,7 @@ found at:
 
 Firmware images can be found here:
 
+- [Montage v3.51](https://usa.yamaha.com/files/download/software/7/1390327/montage351.zip) --- 129MB
 - [Montage v3.50](https://usa.yamaha.com/files/download/software/6/1342016/montage350.zip) --- 129MB
 - [Montage v3.00](https://usa.yamaha.com/files/download/software/8/1302698/montage300-2.zip) --- 180MB
 
