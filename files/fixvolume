@@ -37,7 +37,8 @@ try:
     scale = float(scale[0])/float(scale[2])
   else:
     scale = float(sys.argv[1])
-  assert scale >= 0
+  if scale < 0:
+    die(f'Negative scale factor: {sys.argv[1]}')
 except:
   die(f'Invalid scale factor: {sys.argv[1]}')
 
