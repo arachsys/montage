@@ -180,6 +180,8 @@ entry lists "`Exxx`", then the data blocks "`Dxxx`":
   - `EFVT`, `DFVT` --- favourites
   - `EPCH`, `DPCH` --- pattern chains
   - `EWIM`, `DWIM` --- wave data
+  - `ESPG`, `DSPG` --- smart morph images
+  - `ESOM`, `ESOM` --- smart morph maps
 
 
 ## Performances ("EPFM")
@@ -213,6 +215,12 @@ The 6-bytes of flags in the entries are allocated as follows:
       - `0x10` = one or more monophonic parts
       - `0x20`, `0x40`, `0x80` are unused
   - 2 bytes category bitmask
+
+The arpeggiator flag is enabled if both the master switch and at least one
+part switch is on. The motion sequencer flag is enabled if the master switch
+is on and either the superknob lane is active, or the common sequence is
+active with active lanes, or at least one part sequence is active with
+active lanes.
 
 One or more bits are set in the [category bitmask](categories) corresponding
 to the categories of parts contained in the performance: `0x0001` = Piano,
@@ -285,5 +293,9 @@ Please send any questions, corrections or other contributions to
 Chris Webb \<[chris@arachsys.com](mailto:chris@arachsys.com)>.
 
 The library info area was documented in collaboration with Derek Cook of
-[x.factory Librarians](http://www.xfactory-librarians.co.uk/) in a [GitHub
-discussions thread](https://github.com/arachsys/montage/discussions/5).
+[x.factory Librarians](http://www.xfactory-librarians.co.uk/) following
+[discussions on GitHub](https://github.com/arachsys/montage/discussions),
+and he also provided the precise definition of the performance arpeggiator
+and motion sequencer attribute bits. Derek has delved into the content of
+data blocks (such as performances and smart morph maps), posting a lot of
+useful research beyond the basic structure documented here.
