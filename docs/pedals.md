@@ -1,4 +1,4 @@
-# [Yamaha Montage](/montage/): foot controllers
+# [Yamaha Montage](/montage/) ≫ Foot controllers
 
 ## Input characteristics
 

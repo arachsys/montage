@@ -1,4 +1,4 @@
-# [Yamaha Montage](/montage/): undocumented features
+# [Yamaha Montage](/montage/) ≫ Undocumented features
 
 ## Screenshot to USB storage
 

@@ -1,4 +1,4 @@
-# [Yamaha Montage](/montage/) file format: top-level structure
+# [Yamaha Montage](/montage/) ≫ Top-level file structure
 
 Montage X7U, X7L and X7A files all have an identical structure, but dump
 different subsets of the internal storage. In particular, to load an X7L

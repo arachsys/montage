@@ -1,4 +1,4 @@
-# [Yamaha Montage](/montage/): system exclusive messages
+# [Yamaha Montage](/montage/) ≫ System exclusive messages
 
 ## Documented messages
 
