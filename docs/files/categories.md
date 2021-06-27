@@ -1,4 +1,4 @@
-# [Yamaha Montage](/montage/) file format: category numbers
+# [Yamaha Montage](/montage/) » Category numbers
 
 ## Performance categories
 
