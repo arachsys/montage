@@ -60,10 +60,10 @@ Here is an example catalogue from an empty X7L file:
 ## Library info
 
 Following the catalogue and before the first block, there is an area with a
-source filename and other info for each of the populated library slots. The
-format of this info is not yet documented here, but in the simple case where
-all library slots are empty, it consists of 80 `0xff` bytes followed by a
-single `0x00` byte, this length of 81 being declared in the file header:
+source filename and other info for each of the populated library slots. In
+the simple case where all library slots are empty, it consists of 80 `0xff`
+bytes followed by a single `0x00` byte, this length of 81 being declared in
+the file header:
 
 ```
 0xa0  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
@@ -78,10 +78,33 @@ A self-contained X7U or X7L won't refer to waveforms, arpeggios or curves
 from other libraries, so the library info can be left empty like this for
 such files.
 
-In the general case, the initial chunk of 80 bytes contains data other than
-`0xff`, the next byte _n_ ranges from `0x00` to `0x08` indicating the number
-of libraries installed, and it is followed by _n_ variable length chunks of
-data for each library.
+However, more generally an X7A or X7U file records info for every library
+installed on the instrument when it was saved. The initial 80 bytes comprise
+eight chunks of 10 bytes, one for each library slot. If a slot is occupied,
+the chunk will be `00 ii 01 ii 02 ii 03 ii 04 ii` where _i_ ranges from
+`0x02` to `0x09` for slots 1 to 8. Otherwise there are just 10 `0xff` bytes.
+
+Following this, there is a single byte count _n_ of occupied slots(`0x00` to
+`0x08`) followed by _n_ variable-length descriptions of each occupied slot
+with the following format:
+
+  - 1 byte slot number: `0x02` to `0x09`
+  - zero-terminated library name
+  - 32-bit size of performance favourite flags (always 640)
+  - 640 bytes performance favourite flags (`0x00` = unset, `0x01` = set)
+  - 32-bit size of arpeggio favourite flags (always 256)
+  - 256 bytes arpeggio favourite flags (`0x00` = unset, `0x01` = set)
+  - 32-bit size of waveform favourite flags (always 1024)
+  - 1024 bytes waveform favourite flags (`0x00` = unset, `0x01` = set)
+  - 1 byte `0xff` (apparently fixed)
+  - 32-bit size of included non-waveform data in bytes
+  - 32-bit size of included waveform data in bytes
+  - 32-bit time stamp of library entries (reset at load-time)
+  - 1 byte `0x00` (apparently fixed)
+
+The sizes of waveform and non-waveform data are used in the _Utility ->
+Contents -> Data Utility_ display, but the exact rule to calculate these
+from the file contents is not yet documented here.
 
 
 ## Blocks
@@ -145,7 +168,7 @@ entry lists "`Exxx`", then the data blocks "`Dxxx`":
 
   - `EPFM`, `DPFM` --- performances
   - `EWFM`, `DWFM` --- waveform metadata
-  - `EARP`, `DARP` --- arps
+  - `EARP`, `DARP` --- arpeggios
   - `EMSQ`, `DMSQ` --- motion sequences
   - `ELST`, `DLST` --- live sets
   - `ECRV`, `DCRV` --- curves
@@ -236,11 +259,16 @@ containing all the settings.
 
 ## Favourites ("EFVT")
 
-Although there is a favourite flag in the performance and waveform entry
-lists, users need to be able to mark preset and library items as favourites
-without modifying the original. Favourite lists encapsulate this information
-in an X7U user or X7A backup file. There is one entry for each list type,
-named "`PerformanceFavorite`" and "`WaveformFavorite`" respectively.
+The favourite flag in the entry lists is only used to mark favourite
+performances, arpeggios and waveforms for user banks. The flags in the
+library info area are used to record favourite choices for libraries.
+
+However, users also also need to be able to mark preset items as favourites
+without modifying the original so there is yet another ad-hoc mechanism for
+this. "`EFVT`" and "`DFVT`" blocks have one entry for each list type, named
+"`PerformanceFavorite`", "`ArpeggioFavorite`" and "`WaveformFavorite`"
+respectively. The data for these is a block of flag bytes (`0x00` = unset,
+`0x01` = set), one for each preset of that type.
 
 
 ## Patterns, pattern chains and songs ("EPAT", "EPCH" and "ESNG")
@@ -251,7 +279,11 @@ which often catches out users. However, they are numbered as though they
 live in the user bank: `0x00010000`, `0x00010001`, etc.
 
 
-## Contact
+## Contact and credits
 
 Please send any questions, corrections or other contributions to
 Chris Webb \<[chris@arachsys.com](mailto:chris@arachsys.com)>.
+
+The library info area was documented in collaboration with Derek Cook of
+[x.factory Librarians](http://www.xfactory-librarians.co.uk/) in a [GitHub
+discussions thread](https://github.com/arachsys/montage/discussions/5).
